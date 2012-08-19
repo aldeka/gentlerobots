@@ -3,8 +3,13 @@ $(document).ready(function(){
     
     $('[data-action=show-modal]').click(function(e){
         e.preventDefault();
-        $('#nav .active').removeClass('active');
-        $('.admin-form').addClass('hidden');
+        if ($(this).hasClass('active')) {
+            console.log('undo');
+        }
+        else {
+            $('#nav .active').removeClass('active');
+            $('.admin-form').addClass('hidden');
+        }
         $(this).toggleClass('active');
         var form = $(this).attr('id') + '-form';
         $('#' + form).toggleClass('hidden');
