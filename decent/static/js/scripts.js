@@ -1,4 +1,15 @@
-
+$(document).ready(function(){
+    console.log('ready');
+    
+    $('[data-action=show-modal]').click(function(e){
+        e.preventDefault();
+        $('#nav .active').removeClass('active');
+        $('.admin-form').addClass('hidden');
+        $(this).toggleClass('active');
+        var form = $(this).attr('id') + '-form';
+        $('#' + form).toggleClass('hidden');
+    });
+});
 
 /* giant ajax-and-django handling function of doom */
 $(document).ajaxSend(function(event, xhr, settings) {

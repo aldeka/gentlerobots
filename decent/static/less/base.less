@@ -68,6 +68,10 @@ body {
     .clickable {
         cursor: pointer;
     }
+    
+    .hidden {
+        display: none;
+    }
 
     .button {
         .rounded;
@@ -179,6 +183,28 @@ body {
     
 }
 
+.modal {
+    position: absolute;
+    right: 40px;
+    top: 40px;
+    width: 300px;
+    padding: 20px;
+    z-index: 1000;
+    .rounded;
+    background: @trans-white;
+    
+    p {
+        margin: 0;
+    }
+    
+    input {
+        float: right;
+        &.button {
+            clear: both;
+        }
+    }
+}
+
 #container {
     margin: 0 40px;
 }
@@ -190,7 +216,15 @@ body {
     
     #nav {
         float: right;
+        .active {
+            background: @trans-white;
+            border: none;
+            color: @dark-grey;
+            margin: -1px -4px 0 -4px;
+            padding: 1px 4px 9px 4px;
+        }
     }
+    
 }
 
 #sidebar {

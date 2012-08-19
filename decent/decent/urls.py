@@ -22,12 +22,14 @@ urlpatterns = patterns('',
     url(r'^new/$', 'bmarks.views.crud.new_bookmark', name='new_bookmark'),  # typically not called via own template
     # url(r'^edit/(?P<bmark_id>\d+)/$', 'bmarks.views.crud.edit_bookmark', name='edit_bookmark'), ** hold off until other things work
     url(r'^delete/$', 'bmarks.views.crud.delete_bookmark', name='delete_bookmark'),  # not a separate template
+    
+    url(r'^login/$', 'bmarks.views.crud.login_view', name='login'),
+    url(r'^logout/$', 'bmarks.views.crud.logout_view', name='logout'),
+    
+    # dangerous pattern
     url(r'^(?P<mode>\w+)/$', 'bmarks.views.crud.bmark_list', name='bmark_list_modal'),
     
     # Login/sign up
-    
-    url(r'^login/$', 'bmarks.views.crud.login', name='login'),
-    url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
 
     # **Copy someone else's bookmark to mine, with my own tags etc.
     

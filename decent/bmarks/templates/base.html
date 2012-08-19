@@ -51,8 +51,27 @@
                 {% if user.is_authenticated %}
                 <a href="{% url subscription_page %}">my subscriptions</a> | <a href="{% url logout %}">logout</a>
                 {% else %}
-                <a href="{% url login %}">login / signup</a>
+                <a href="{% url login %}" id="signup" data-action="show-modal">signup</a> | 
+                <a href="{% url login %}" id="login" data-action="show-modal">login</a>
                 {% endif %}
+            </div>
+            <div id="login-form" class="modal admin-form hidden">
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="form-type" value="login"/>
+                    {{ login_form.as_p }}
+                    <br/>
+                    <p><input type="submit" value="login" class="button"/></p>
+                </form>
+            </div>
+            <div id="signup-form" class="modal admin-form hidden">
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="form-type" value="signup"/>
+                    {{ new_user_form.as_p }}
+                    <br/>
+                    <p><input type="submit" value="sign up" class="button"/></p>
+                </form>
             </div>
             <h1><a href="{% url home %}" title="there are many like it, [but this one is mine]">tamli</a></h1>
             <h2>decentralized social bookmarking</h2>

@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as login_function
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
 from bmarks.models import Bookmark, Tag, Human, Address, Subscriber, Subscription
 from bmarks.forms import BookmarkForm, SubscriptionForm
 import datetime
@@ -12,37 +13,42 @@ from operator import attrgetter
     
 def bmark_list(request, username=None, tag=None, mode=None):
     if request.method == 'POST':
-        form = BookmarkForm(request.POST)
-        if form.is_valid():
-            url = form.cleaned_data['url']
-            tags = form.cleaned_data['tags']
-            description = form.cleaned_data['description']
-            human = request.user.human
-            b = Bookmark(url=url, owner=human.address)
-            if description:
-                b.description = description
-            if tags:
-                b.save()
-                tag_list = tags.split(',')
-                print tags
-                for tag in tag_list:
-                    tag = tag.strip()
-                    if Tag.objects.filter(name=tag):
-                        t = Tag.objects.get(name=tag)
-                    else:
-                        t = Tag(name=tag)
-                        t.save()
-                    b.tags.add(t)
-            b.save()
+        if request.POST['form-type']:
+            return login_view(request)
         else:
-            print form
-        return redirect('home')
+            form = BookmarkForm(request.POST)
+            if form.is_valid():
+                url = form.cleaned_data['url']
+                tags = form.cleaned_data['tags']
+                description = form.cleaned_data['description']
+                human = request.user.human
+                b = Bookmark(url=url, owner=human.address)
+                if description:
+                    b.description = description
+                if tags:
+                    b.save()
+                    tag_list = tags.split(',')
+                    print tags
+                    for tag in tag_list:
+                        tag = tag.strip()
+                        if Tag.objects.filter(name=tag):
+                            t = Tag.objects.get(name=tag)
+                        else:
+                            t = Tag(name=tag)
+                            t.save()
+                        b.tags.add(t)
+                b.save()
+            else:
+                print form
+            return redirect('home')
     elif request.method == 'GET':
         # default behavior: show all bookmarks
         bookmarks = Bookmark.objects.all()
         form = BookmarkForm()
         human = None
         subscriptions = None
+        new_user_form = UserCreationForm()
+        login_form = AuthenticationForm()
         
         if request.user.is_authenticated():
             human = Human.objects.get(username=request.user.username)
@@ -91,39 +97,55 @@ def bmark_list(request, username=None, tag=None, mode=None):
             'human': human,
             'form': form,
             'mode': mode,
+            'new_user_form': new_user_form,
+            'login_form': login_form,
         }
         return render(request, 'listing.html', context)
         
-def login(request):
+        
+def login_view(request):
     if request.method == 'POST':
-        print request.POST
-        username = request.POST['username']
-        password = request.POST['password']
         if request.POST['form-type'] == 'signup':
-            if not Human.objects.get(username=username):
+            print "signup form"
+            print request.POST
+            username = request.POST['username']
+            password = request.POST['password1']
+            if not Human.objects.filter(username=username):
                 a = Address(username=username, domain='localhost')
                 a.save()
-                h = Human(username=username, password=password, address=a)
+                h = Human(username=username, password=make_password(password), address=a)
                 h.save()
-                login_function(request, h)
+                print h
+                user = authenticate(username=username, password=password)
+                print "auth worked"
+                login_function(request, user)
+                print "logged in!"
                 return redirect('home')
             else:
-                return redirect('login')
+                try:
+                    user = authenticate(username=username, password=password)
+                    if user is not None:
+                        login_function(request, user)
+                        print "logged in!"
+                        return redirect('home')
+                except:
+                    pass
+            return redirect('home')
         else:
+            form = AuthenticationForm(request.POST)
+            username = request.POST['username']
+            password = request.POST['password']
             user = authenticate(username=username, password=password)
             if user is not None:
                 login_function(request, user)
                 return redirect('home')
-            else:
-                return redirect('login')
-    else:
-        new_user_form = UserCreationForm()
-        login_form = AuthenticationForm()
-        context = {
-            'new_user_form': new_user_form,
-            'login_form': login_form,
-        }
-        return render(request, 'registration/login.html', context)
+    return redirect('home')
+        
+        
+def logout_view(request):
+    logout(request)
+    return redirect('home')
+
 
 @login_required 
 def add_subscription(request):
