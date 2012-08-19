@@ -27,7 +27,7 @@ class Subscription(Address):
         
 
 class Subscriber(Address):
-    the_person_sending = models.ForeignKey(Address)
+    the_person_sending = models.ForeignKey(Address, related_name='the_person_sending')
     last_updated = models.DateTimeField()
     
     def __unicode__(self):
