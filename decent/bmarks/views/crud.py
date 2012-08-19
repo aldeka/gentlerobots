@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from bmarks.models import Bookmark, Tag, Human, Address, Subscriber, Subscription
 from bmarks.forms import BookmarkForm, SubscriptionForm
 import datetime
+from itertools import chain
+from operator import attrgetter
     
 def bmark_list(request, username=None, tag=None, mode=None):
     if request.method == 'POST':
@@ -40,6 +42,7 @@ def bmark_list(request, username=None, tag=None, mode=None):
         bookmarks = Bookmark.objects.all()
         form = BookmarkForm()
         human = None
+        subscriptions = None
         
         if request.user.is_authenticated():
             human = Human.objects.get(username=request.user.username)
@@ -66,21 +69,25 @@ def bmark_list(request, username=None, tag=None, mode=None):
         elif mode == 'subs':
             subscriptions = Subscription.objects.filter(the_person_listening=human)
             print subscriptions
-            bookmarks = bookmarks.filter(owner=human.address)
+            my_bookmarks = bookmarks.filter(owner=human.address)
+            c = chain(my_bookmarks, [])
             for subscription in subscriptions:
                 if subscription.domain == 'localhost':
                     h = Human.objects.get(username=subscription.username)
-                    bookmarks = bookmarks.filter(owner=h.address) | bookmarks
+                    c = chain(c, bookmarks.filter(owner=h.address))
                 else:
-                    bookmarks = bookmarks.filter(remote_owner=subscription) | bookmarks
+                    c = chain(c, bookmarks.filter(remote_owner=subscription))
+            
+            bookmarks = sorted(c, key=attrgetter('time'))
                     
         # show just my bookmarks
         elif mode == 'mine':
             bookmarks = bookmarks.filter(owner=human.address)
         
         context = {
-            'bookmarks': bookmarks.order_by('-time'),
+            'bookmarks': bookmarks,
             'tags': Tag.objects.all(),
+            'subscriptions': subscriptions,
             'human': human,
             'form': form,
             'mode': mode,
@@ -121,19 +128,29 @@ def login(request):
 @login_required 
 def add_subscription(request):
     if request.method == "POST":
-        user = request.user
-        if domain=="localhost":
-            human = Human.objects.get(username=username)
-            last_updated = datetime.datetime.now()
-            last_received_update = datetime.datetime.now()
-            subscriber = Subscriber(username=user.username, domain=user.human.address.domain, the_person_sending=human, last_updated=last_updated)
+        human = request.user.human
+        if request.POST['form-type']:
+            form = SubscriptionForm(request.POST)
+            if form.is_valid():
+                address = form.cleaned_data['full_address'].split('@')
+                if len(address) <= 2:
+                    username = address[0]
+                    domain = address[1]
+        elif request.is_ajax():
+            username = request.POST['username']
+            domain = request.POST['domain']
+            
+        if domain == "localhost":
+            h = get_object_or_404(Human, username=username)
+            subscriber = Subscriber(username=human.username, domain="localhost", the_person_sending=h, last_updated=datetime.datetime.now())
             subscriber.save()
         else:
-            # ping other domain to let them know to create a subscriber
-            # get and process bookmark data
-            last_received_update = datetime.datetime.now()
-        subscription = Subscription(username=username, domain=domain, the_person_listening=user.human, last_received_update=last_received_update)
+            # ping them to make a subscriber
+            pass
+        subscription = Subscription(username=username, domain=domain, the_person_listening=human, last_received_update=datetime.datetime.now())
         subscription.save()
+        return redirect('subscription_page')
+
     else:
         if request.user.is_authenticated():
             human = request.user.human
@@ -162,4 +179,23 @@ def delete_bookmark(request):
             b = Bookmark.objects.get(pk=int(bookmark_id))
             b.delete()
             message = "Successfully deleted bookmark #" + bookmark_id
+    return HttpResponse(message,mime)
+    
+def delete_subscription(request):
+    message = ''
+    mime='text'
+    human = request.user.human
+    if request.is_ajax() and request.method == 'POST':
+        if request.POST['subscription_id']:
+            subscription_id = request.POST['subscription_id'][13:]
+            subscription = Subscription.objects.get(pk=int(subscription_id))
+            if subscription.domain == "localhost":
+                h = Human.objects.get(username=subscription.username)
+                subscriber = Subscriber.objects.filter(username=human.username).filter(the_person_sending=h)[0]
+                subscriber.delete()
+            else:
+                #ping other service
+                pass
+            subscription.delete()
+            message = "Successfully deleted subscription #" + subscription_id
     return HttpResponse(message,mime)

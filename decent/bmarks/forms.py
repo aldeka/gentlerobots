@@ -6,4 +6,4 @@ class BookmarkForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}), required=False, label="description")
     
 class SubscriptionForm(forms.Form):
-    username = forms.CharField(label="username@domain.tld")
+    full_address = forms.CharField(label="username@domain.tld")

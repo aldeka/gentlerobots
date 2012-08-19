@@ -24,7 +24,7 @@
                 {% else %}
                     {{ bookmark.owner.username }}
                 {% endif %}
-                {% if user.is_authenticated and bookmark.owner not in user.human.subscription_set.all and bookmark.owner != user.human.address %}
+                {% if user.is_authenticated and bookmark.owner != user.human.address and bookmark.owner not in subscriptions %}
                 <a class="subscribe-link" href="{% url add_subscription %}">subscribe</a>
                 {% endif %}
             {% endif %} -- added {{ bookmark.time.date|date:"m.d.y" }}</span>
