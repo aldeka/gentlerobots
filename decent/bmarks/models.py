@@ -18,7 +18,9 @@ class Human(User):
     address = models.OneToOneField(Address)
     
     
-class Subscription(Address):
+class Subscription(models.Model):
+    username = models.CharField(max_length=20)
+    domain = models.CharField(max_length=50, default="localhost")
     the_person_listening = models.ForeignKey(Human)
     last_received_update = models.DateTimeField()
     
@@ -26,7 +28,9 @@ class Subscription(Address):
         return 'From: ' + self.the_person_listening + 'to: ' + self.username + '@' + self.domain
         
 
-class Subscriber(Address):
+class Subscriber(models.Model):
+    username = models.CharField(max_length=20)
+    domain = models.CharField(max_length=50, default="localhost")
     the_person_sending = models.ForeignKey(Address, related_name='the_person_sending')
     last_updated = models.DateTimeField()
     
