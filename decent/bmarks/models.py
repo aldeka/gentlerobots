@@ -9,8 +9,8 @@ class Address(models.Model):
     
 class Human(User):
     # username
-    # email
     # password
+    # email
     address = models.OneToOneField(Address)
     
 class Subscription(Address):
@@ -25,7 +25,7 @@ class Tag(models.Model):
     name = models.CharField(max_length=30)
     
 class Bookmark(models.Model):
-    owner = models.ForeignKey(Human)
+    owner = models.ForeignKey(Address)
     url = models.URLField()
     description = models.TextField(**optional)
     tags = models.ManyToManyField(Tag, **optional)

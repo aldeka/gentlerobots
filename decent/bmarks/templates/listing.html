@@ -1,0 +1,14 @@
+{% extends 'two_column.html' %}
+
+{% block main %}
+    {% if bookmarks %}
+    <h3>Bookmarks</h3>
+    <ul>
+    {% for bookmark in bookmarks %}
+        <li><a href="{{ bookmark.url }}">{{ bookmark.url }}</a></li>
+    {% endfor %}
+    </ul>
+    {% else %}
+    <h3>No bookmarks found, sorry :(</h3>
+    {% endif %}
+{% endblock main %}

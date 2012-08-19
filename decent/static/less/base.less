@@ -1,0 +1,95 @@
+@link-color: #A90F63;
+@trans-white: rgba(255,255,255,.6);
+@trans-blue: rgba(0,36,56,.8);
+
+.rounded (@radius: 10px) {
+  border-radius: @radius;
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #ddeffa;
+    font-family: Raleway, Verdana, sans-serif;
+    font-size: 12pt;
+    color: @trans-blue;
+    line-height: 1.5em;
+    
+    a {
+        color: @link-color;
+        font-weight: bold;
+        text-decoration: none;
+        border-bottom: 1pt dotted @link-color;
+    }
+    
+    h1 {
+        font-size: 2.4em;
+    }
+    
+    h2 {
+       font-size: 1.6em;
+       font-style: italic;
+    }
+    
+    h2, h3 {
+        font-weight: normal;
+    }
+    
+    h3 {
+        font-size: 1.6em;
+    }
+    
+}
+
+#container {
+    margin: 0 40px;
+}
+
+#header {
+    padding: 0 10px 10px;
+    border-bottom: 1pt dotted @trans-blue;
+    margin-bottom: 20px;
+    
+    #nav, #add-new-bookmark {
+        float: right;
+    }
+    
+    #add-new-bookmark {
+        clear: right;
+    }
+}
+
+#main {
+    margin-right: 250px;
+    padding: 20px 10px;
+}
+
+#main, #one-column-main {
+    .rounded;
+    background: @trans-white;
+}
+
+#one-column-main {
+    padding: 10px 20px;
+    max-width: 950px;
+}
+
+.pullquote {
+    margin: 0 auto;
+    width: 600px;
+    font-size: 1.1em;
+    font-weight: normal;
+    text-align: center;
+}
+
+#sidebar {
+    width: 220px;
+    float: right;
+    padding: 20px 10px;
+}
+
+#footer {
+    margin-top: 30px;
+}
