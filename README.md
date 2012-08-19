@@ -11,8 +11,11 @@ tamli is a pathetically generic social bookmarking app, crushed into mediocrity 
 
 ![screenshot of it actually working locally, thanks for nothing heroku](http://dl.dropbox.com/u/20797439/screenshots/tamli.png)
 
-Known bugs:
+known bugs:
 
 * the subscribe links won't go away on the me+subs tab, whyyy
 * me + subscriptions tab bookmarks are in the opposite order, concatenating querysets sucks
-* external pings still need to be written out
+* external pings and actual federation architecture need to exist
+* pagination, what
+* password changes / account email / etc etc
+* ugly-ass fonts / actual site graphics
