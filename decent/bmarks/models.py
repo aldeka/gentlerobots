@@ -21,6 +21,7 @@ class Human(User):
     
     
 class Subscription(models.Model):
+    id = models.IntegerField(unique=True, primary_key=True)
     username = models.CharField(max_length=20)
     domain = models.CharField(max_length=50, default="localhost")
     the_person_listening = models.ForeignKey(Human)
