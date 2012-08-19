@@ -8,9 +8,8 @@ from bmarks.models import Bookmark, Tag, Human, Address, Subscriber, Subscriptio
 from bmarks.forms import BookmarkForm
 import datetime
     
-def bmark_list(request, username=None, tag=None, show_all=False):
+def bmark_list(request, username=None, tag=None, mode=None):
     if request.method == 'POST':
-        print request.POST
         form = BookmarkForm(request.POST)
         if form.is_valid():
             url = form.cleaned_data['url']
@@ -36,14 +35,21 @@ def bmark_list(request, username=None, tag=None, show_all=False):
         else:
             print form
         return redirect('home')
-    else:
+    elif request.method == 'GET':
         # default behavior: show all bookmarks
         bookmarks = Bookmark.objects.all()
         form = BookmarkForm()
         human = None
-        mine = False
+        
         if request.user.is_authenticated():
             human = Human.objects.get(username=request.user.username)
+            if not mode:
+                mode = "subs"
+        else:
+            if mode=="mine" or mode=="subs":
+                redirect('home')
+            else:
+                mode="all"
         
         # get all for a given username
         if username:
@@ -57,30 +63,23 @@ def bmark_list(request, username=None, tag=None, show_all=False):
             bookmarks = bookmarks.filter(tags=tag) 
         
         # show my bookmarks plus those of my subscriptions
-        elif request.user.is_authenticated() and not show_all:
+        elif mode=='subs':
             subscriptions = Subscription.objects.filter(the_person_listening=human)
             bookmarks = bookmarks.filter(owner=human.address)
             for subscription in subscriptions:
                 bookmarks = bookmarks.filter(owner=subscription) | bookmarks
+        # show just my bookmarks
+        elif mode=='mine':
+            bookmarks = bookmarks.filter(owner=human.address)
                 
         context = {
             'bookmarks': bookmarks.order_by('-time'),
             'tags': Tag.objects.all(),
             'human': human,
             'form': form,
-            'mine': mine,
-            'all': show_all,
+            'mode': mode,
         }
         return render(request, 'listing.html', context)
-    
-def bmark_list_all(request):
-    return bmark_list(request, None, None, True)
-    
-def bmark_list_mine(request):
-    if request.user.is_authenticated():
-        return bmark_list(request, request.user.username)
-    else:
-        return redirect('home')
         
 def login(request):
     if request.method == 'POST':

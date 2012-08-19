@@ -29,7 +29,6 @@ body {
     
     a {
         color: @link-color;
-        font-weight: bold;
         text-decoration: none;
         border-bottom: 1pt dotted @link-color;
     }
@@ -49,7 +48,7 @@ body {
     }
     
     h3 {
-        font-size: 1.6em;
+        font-size: 1.2em;
         margin-top: 0;
     }
     
@@ -80,7 +79,7 @@ body {
         border-right: @button-border-dark;
     }
     
-    input, textarea {
+    p input, p textarea {
         border: 1pt solid @grey;
         background: @lightest-grey;
     }
@@ -92,6 +91,36 @@ body {
     
     form .helptext {
         display: none;
+    }
+    
+    #bookmark-nav {
+        margin: 0 0 30px 0;
+        padding: 0;
+        font-size: 1.3em;
+        
+        li {
+            padding: 0 10px 0 0;
+            display: inline;
+            a {
+                color: @grey;
+                padding: 5px 10px;
+                border: none;
+                
+                &.active {
+                    color: @dark-grey;
+                }
+                
+                &:hover {
+                    color: black;
+                    background: @trans;
+                }
+                
+                &.active {
+                    background: @trans-white;
+                }
+                
+            }
+        }
     }
     
     .bookmark-list {
@@ -158,39 +187,9 @@ body {
     padding: 0 10px 10px;
     border-bottom: 1pt dotted @dark-grey;
     margin-bottom: 20px;
-    height: 146px;
     
-    #nav, #add-new-bookmark {
+    #nav {
         float: right;
-        font-size: .9em;
-    }
-    
-    #add-new-bookmark {
-        margin-top: 7px;
-        clear: right;
-        max-width: 555px;
-        padding: 4px 10px;
-        background: @blue; 
-        .rounded(5px);
-        
-        h4 {
-        }
-        
-        p {
-            float: right;
-            margin: 0 0 0 10px;
-            
-            textarea {
-                width: 370px;
-            }
-        }
-        
-        #big-submit-button {
-            width: 60px;
-            height: 83px;
-            margin: 24px 0 0 3px;
-            float: right;
-        }
     }
 }
 
@@ -198,6 +197,33 @@ body {
     width: 260px;
     float: right;
     padding: 20px 10px;
+    
+    .widget {
+        margin-bottom: 20px;
+    }
+    
+    #add-new-bookmark-widget {
+        max-width: 555px;
+        padding: 4px 10px; 
+        .rounded(5px);
+        
+        p {
+            margin: 0;
+            
+            input {
+                width: 160px;
+            }
+            
+            textarea {
+                width: 230px;
+            }
+        }
+        
+        #big-submit-button {
+            padding: 10px 40px;
+            font-size: 1.1em;
+        }
+    }
 }
 
 #main {
@@ -231,4 +257,6 @@ body {
 
 #footer {
     margin-top: 30px;
+    clear: both;
+    width: 100%;
 }

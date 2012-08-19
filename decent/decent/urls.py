@@ -15,8 +15,6 @@ urlpatterns = patterns('',
     
     url(r'^$', 'bmarks.views.crud.bmark_list', name='home'),  # shows my + subscriptions if logged in, all on this install if logged out
     url(r'^about/$', 'django.views.generic.simple.direct_to_template', {'template': 'about.html',}, name='about'),
-    url(r'^me/$', 'bmarks.views.crud.bmark_list_mine', name='bmark_list_mine'),
-    url(r'^all/$', 'bmarks.views.crud.bmark_list_all', name='bmark_list_all'),
     url(r'^human/(?P<username>'+alphanum_plus+')/$', 'bmarks.views.crud.bmark_list', name='bmark_list_by_user'),
     url(r'^tag/(?P<tag>'+alphanum_plus+')/$', 'bmarks.views.crud.bmark_list', name='bmark_list_by_tag'),
     url(r'^subscriptions/$', 'bmarks.views.crud.add_subscription', name='subscribe_page'),
@@ -24,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^new/$', 'bmarks.views.crud.new_bookmark', name='new_bookmark'),  # typically not called via own template
     # url(r'^edit/(?P<bmark_id>\d+)/$', 'bmarks.views.crud.edit_bookmark', name='edit_bookmark'), ** hold off until other things work
     url(r'^delete/$', 'bmarks.views.crud.delete_bookmark', name='delete_bookmark'),  # not a separate template
+    url(r'^(?P<mode>\w+)/$', 'bmarks.views.crud.bmark_list', name='bmark_list_modal'),
     
     # Login/sign up
     

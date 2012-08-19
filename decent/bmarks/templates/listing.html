@@ -1,8 +1,14 @@
 {% extends 'two_column.html' %}
 
 {% block main %}
+    <ul id="bookmark-nav">
+        <li><a href="{% url bmark_list_modal 'all' %}" {% if mode == "all" %}class="active"{% endif %} >all bookmarks</a></li>
+        {% if user.is_authenticated %}
+        <li><a href="{% url bmark_list_modal 'subs' %}" {% if mode == "subs" %}class="active"{% endif %}>my bookmarks and subscriptions</a></li>
+        <li><a href="{% url bmark_list_modal 'mine' %}" {% if mode == "mine" %}class="active"{% endif %}>just my bookmarks</a></li>
+        {% endif %}
+    </ul>
     {% if bookmarks %}
-    <h3>{% if mine %}My {% elif all %}All {% endif %}Bookmarks</h3>
     <ul class="bookmark-list">
     {% for bookmark in bookmarks %}
         <li id="bookmark-{{ bookmark.id }}" class="bookmark">
