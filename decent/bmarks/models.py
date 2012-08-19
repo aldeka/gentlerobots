@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_init, post_save
+from django.dispatch import receiver
 
 optional = dict(blank=True, null=True)
 
@@ -22,20 +24,20 @@ class Subscription(models.Model):
     username = models.CharField(max_length=20)
     domain = models.CharField(max_length=50, default="localhost")
     the_person_listening = models.ForeignKey(Human)
-    last_received_update = models.DateTimeField()
+    last_received_update = models.DateTimeField(auto_now_add=True)
     
     def __unicode__(self):
-        return 'From: ' + self.the_person_listening + 'to: ' + self.username + '@' + self.domain
+        return 'From: ' + self.the_person_listening.username + ' to: ' + self.username + '@' + self.domain
         
 
 class Subscriber(models.Model):
     username = models.CharField(max_length=20)
     domain = models.CharField(max_length=50, default="localhost")
-    the_person_sending = models.ForeignKey(Address, related_name='the_person_sending')
-    last_updated = models.DateTimeField()
+    the_person_sending = models.ForeignKey(Human)
+    last_updated = models.DateTimeField(auto_now_add=True)
     
     def __unicode__(self):
-        return 'From: ' + self.the_person_sending + 'to: ' + self.username + '@' + self.domain
+        return 'From: ' + self.the_person_sending.username + ' to: ' + self.username + '@' + self.domain
         
     
 class Tag(models.Model):
@@ -46,7 +48,8 @@ class Tag(models.Model):
     
     
 class Bookmark(models.Model):
-    owner = models.ForeignKey(Address)
+    owner = models.ForeignKey(Address, **optional)
+    remote_owner = models.ForeignKey(Subscription, **optional)
     url = models.URLField()
     description = models.TextField(**optional)
     tags = models.ManyToManyField(Tag, **optional)
@@ -59,3 +62,14 @@ class Bookmark(models.Model):
         
     class Meta:
         ordering = ['-time', 'owner']
+   
+   
+### Signals handlers ###
+
+@receiver(post_save, sender=Bookmark)
+def bookmark_save(sender, **kwargs):
+    if created:
+        print "Received a hook for a new Bookmark!"
+        print instance.url
+    else:
+        print "Received a hook for an old Bookmark."

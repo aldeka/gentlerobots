@@ -1,0 +1,19 @@
+{% extends 'one_column_base.html' %}
+
+{% block one-col %}
+<h3>Subscriptions</h3>
+
+     <ul class="subscription-list">
+    {% for subscription in subscriptions %}
+        <li id="subscription-{{ subscription.id }}" class="subscription">
+        {% if subscription.domain == 'localhost' %}
+            <a href="{% url bmark_list_by_user subscription.username %}">{{ subscription.username }}@{{ subscription.domain }}</a>
+        {% else %}
+            {{ subscription.username }}@{{ subscription.domain }}
+        {% endif %} 
+        <span id="delete-{{ subscription.id }}" class="delete clickable">x</span>
+        </li>
+    {% endfor %}
+    </ul>
+    
+{% endblock one-col %}

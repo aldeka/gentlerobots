@@ -6,16 +6,16 @@
         {% block sidebar %}
             {% if user.is_authenticated and form %}
             <div id="add-new-bookmark-widget" class="widget">
-                <h3>Add a bookmark:</h3>
+                <h3>add a bookmark:</h3>
                     <form method="POST">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <input type="submit" value="Submit :-)" id="big-submit-button"/>
+                    <input type="submit" value="Submit :-)" id="big-submit-button" class="button"/>
                     </form>
             </div>
             {% endif %}
             <div class="widget" id="tag-widget">
-                <h3>Tags</h3>
+                <h3>tags:</h3>
                 <ul>
                 {% for tag in tags %}
                     {% if tag.bookmark_set.count %}

@@ -93,7 +93,7 @@ body {
         display: none;
     }
     
-    #bookmark-nav {
+    #bookmark-nav, #main h3, #one-column-main h3 {
         margin: 0 0 30px 0;
         padding: 0;
         font-size: 1.3em;
@@ -123,11 +123,11 @@ body {
         }
     }
     
-    .bookmark-list {
+    .bookmark-list, .subscription-list {
         padding: 0;
         margin: 0 -10px;
         
-        .bookmark {
+        .bookmark, .subscription {
             padding: 2px 15px;
             margin-bottom: 10px;
             
@@ -142,6 +142,7 @@ body {
                 
                 a {
                     color: @grey;
+                    border-color: @grey;
                 }
             }
             

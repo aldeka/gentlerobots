@@ -63,15 +63,21 @@ def bmark_list(request, username=None, tag=None, mode=None):
             bookmarks = bookmarks.filter(tags=tag) 
         
         # show my bookmarks plus those of my subscriptions
-        elif mode=='subs':
+        elif mode == 'subs':
             subscriptions = Subscription.objects.filter(the_person_listening=human)
+            print subscriptions
             bookmarks = bookmarks.filter(owner=human.address)
             for subscription in subscriptions:
-                bookmarks = bookmarks.filter(owner=subscription) | bookmarks
+                if subscription.domain == 'localhost':
+                    h = Human.objects.get(username=subscription.username)
+                    bookmarks = bookmarks.filter(owner=h.address) | bookmarks
+                else:
+                    bookmarks = bookmarks.filter(remote_owner=subscription) | bookmarks
+                    
         # show just my bookmarks
-        elif mode=='mine':
+        elif mode == 'mine':
             bookmarks = bookmarks.filter(owner=human.address)
-                
+        
         context = {
             'bookmarks': bookmarks.order_by('-time'),
             'tags': Tag.objects.all(),
@@ -113,8 +119,8 @@ def login(request):
         return render(request, 'registration/login.html', context)
 
 @login_required 
-def add_subscription(request, domain=None, username=None):
-    if domain and username and request.user.is_authenticated():
+def add_subscription(request):
+    if request.method == "POST":
         user = request.user
         if domain=="localhost":
             human = Human.objects.get(username=username)
@@ -128,6 +134,18 @@ def add_subscription(request, domain=None, username=None):
             last_received_update = datetime.datetime.now()
         subscription = Subscription(username=username, domain=domain, the_person_listening=user.human, last_received_update=last_received_update)
         subscription.save()
+    else:
+        if request.user.is_authenticated():
+            human = request.user.human
+            subscriptions = Subscription.objects.filter(the_person_listening=human)
+            context = {
+                'subscriptions': subscriptions,
+                'human': human,
+            }
+            return render(request, 'subscriptions.html', context)
+        else:
+            redirect('login')
+        
 
 @login_required
 def new_bookmark(request):
