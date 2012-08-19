@@ -7,7 +7,7 @@ If I ever get heroku to work, the app will appear at http://peaceful-atoll-3989.
 
 sigh.
 
-tamli is a pathetically generic social bookmarking app, crushed into mediocrity by high expectations and unfamiliar tools
+tamli is a pathetically generic social bookmarking app, crushed into mediocrity by high expectations and unfamiliar tools. judges, please don't waste too much time looking at it. basically everyone else's app must be better.
 
 ![screenshot of it actually working locally, thanks for nothing heroku](http://dl.dropbox.com/u/20797439/screenshots/tamli.png)
 
