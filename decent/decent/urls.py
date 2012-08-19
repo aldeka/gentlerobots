@@ -23,7 +23,7 @@ urlpatterns = patterns('',
     url(r'^subscribe/(?P<domain>\S+)/(?P<username>'+alphanum_plus+')/$', 'bmarks.views.crud.add_subscription', name='add_subscription'),
     url(r'^new/$', 'bmarks.views.crud.new_bookmark', name='new_bookmark'),  # typically not called via own template
     # url(r'^edit/(?P<bmark_id>\d+)/$', 'bmarks.views.crud.edit_bookmark', name='edit_bookmark'), ** hold off until other things work
-    url(r'^delete/(?P<bmark_id>\d+)/$', 'bmarks.views.crud.delete_bookmark', name='delete_bookmark'),  # not a separate template
+    url(r'^delete/$', 'bmarks.views.crud.delete_bookmark', name='delete_bookmark'),  # not a separate template
     
     # Login/sign up
     

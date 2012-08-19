@@ -1,6 +1,16 @@
+@lightest-grey: #fdfdfd;
+@lighter-grey: #f6f6f6;
+@light-grey: #dfdfdf;
+@grey: #888;
+@light-blue: #ccf1fe;
+@blue: #afdcdf;
 @link-color: #A90F63;
-@trans-white: rgba(255,255,255,.6);
-@trans-blue: rgba(0,36,56,.8);
+@trans: rgba(255,255,255,.5);
+@trans-white: rgba(255,255,255,.7);
+@dark-grey: #222;
+
+@button-border-light: 2pt solid white;
+@button-border-dark: 2pt solid @light-grey;
 
 .rounded (@radius: 10px) {
   border-radius: @radius;
@@ -10,11 +20,11 @@
 
 body {
     margin: 0;
-    padding: 0;
-    background: #ddeffa;
+    padding: 10px 0;
+    background: @light-blue;
     font-family: Raleway, Verdana, sans-serif;
     font-size: 12pt;
-    color: @trans-blue;
+    color: @dark-grey;
     line-height: 1.5em;
     
     a {
@@ -26,6 +36,7 @@ body {
     
     h1 {
         font-size: 2.4em;
+        margin-top: 0;
     }
     
     h2 {
@@ -39,6 +50,93 @@ body {
     
     h3 {
         font-size: 1.6em;
+        margin-top: 0;
+    }
+    
+    h4 {
+        font-size: 1.1em;
+        margin: 0;
+    }
+    
+    .pullquote {
+        margin: 0 auto;
+        width: 600px;
+        font-size: 1.1em;
+        font-weight: normal;
+        text-align: center;
+    }
+    
+    .clickable {
+        cursor: pointer;
+    }
+
+    .button {
+        .rounded;
+        font-size: 1.6em;
+        background: @lighter-grey;
+        border-top: @button-border-light;
+        border-left: @button-border-light;
+        border-bottom: @button-border-dark;
+        border-right: @button-border-dark;
+    }
+    
+    input, textarea {
+        border: 1pt solid @grey;
+        background: @lightest-grey;
+    }
+    
+    ul {
+        padding: 0 10px;
+        list-style-type: none;
+    }
+    
+    .bookmark-list {
+        padding: 0;
+        margin: 0 -10px;
+        
+        .bookmark {
+            padding: 2px 15px;
+            margin-bottom: 10px;
+            
+            &:hover {
+                background: @trans;
+            }
+            
+            .metadata {
+                font-size: .9em;
+                font-style: italic;
+                color: @grey;
+                
+                a {
+                    color: @grey;
+                }
+            }
+            
+            .tag {
+                a {
+                    font-size: .9em;
+                    color: @grey;
+                    border: none;
+                    padding: 2px 4px;
+                    .rounded(5px);
+                    background: white;
+                }
+            }
+            
+            p {
+                font-size: .9em;
+            }
+            
+            ul li {
+                display: inline;
+            }
+            
+            .delete {
+                float: right;
+                font-size: 1.2em;
+                color: @grey;
+            }
+        }
     }
     
 }
@@ -49,8 +147,9 @@ body {
 
 #header {
     padding: 0 10px 10px;
-    border-bottom: 1pt dotted @trans-blue;
+    border-bottom: 1pt dotted @dark-grey;
     margin-bottom: 20px;
+    height: 138px;
     
     #nav, #add-new-bookmark {
         float: right;
@@ -58,6 +157,29 @@ body {
     
     #add-new-bookmark {
         clear: right;
+        max-width: 555px;
+        padding: 4px 10px;
+        background: @blue; 
+        .rounded(5px);
+        
+        h4 {
+        }
+        
+        p {
+            float: right;
+            margin: 0 0 0 10px;
+            
+            textarea {
+                width: 370px;
+            }
+        }
+        
+        #big-submit-button {
+            width: 60px;
+            height: 83px;
+            margin: 24px 0 0 3px;
+            float: right;
+        }
     }
 }
 
@@ -74,14 +196,6 @@ body {
 #one-column-main {
     padding: 10px 20px;
     max-width: 950px;
-}
-
-.pullquote {
-    margin: 0 auto;
-    width: 600px;
-    font-size: 1.1em;
-    font-weight: normal;
-    text-align: center;
 }
 
 #sidebar {

@@ -1,11 +1,61 @@
 {% extends 'two_column.html' %}
 
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.delete').click(function(e){
+                e.preventDefault();
+                var bookmark = $(this).parent();
+                var id = $(bookmark).attr('id');
+                console.log('deleting ' + id);
+                $.get(
+                    "{% url delete_bookmark %}",
+                    {
+                        'bookmark_id': id,
+                    },
+                    function(data){
+                        $(bookmark).hide();
+                    }
+                );
+
+            });
+        });
+    </script>
+{% endblock js %}
+
 {% block main %}
     {% if bookmarks %}
-    <h3>Bookmarks</h3>
-    <ul>
+    <h3>{% if mine %}My {% endif %}Bookmarks</h3>
+    <ul class="bookmark-list">
     {% for bookmark in bookmarks %}
-        <li><a href="{{ bookmark.url }}">{{ bookmark.url }}</a></li>
+        <li id="bookmark-{{ bookmark.id }}" class="bookmark">
+            {% if bookmark.owner.human and user.is_authenticated and user.username == bookmark.owner.human.username %}
+                <span id="delete-{{ bookmark.id }}" class="delete clickable">x</span>
+            {% endif %}
+            <a href="{{ bookmark.url }}">{{ bookmark.url }}</a>
+            <span class="metadata">
+            {% if not mine %}
+             -- posted by 
+                {% if bookmark.owner.human %}
+                    <a href="{% url bmark_list_by_user bookmark.owner.human.username %}">{{ bookmark.owner.human.username }}</a>
+                {% else %}
+                    {{ bookmark.owner.username }}
+                {% endif %}
+            {% endif %} -- added {{ bookmark.time.date|date:"m.d.y" }}</span>
+            
+            {% if bookmark.description %}
+                <p class="description">{{ bookmark.description }}</p>
+            {% endif %}
+            
+            {% if bookmark.tags %}
+                <ul class="tags">
+                {% for tag in bookmark.tags.all %}
+                    <li class="tag"><a href="{% url bmark_list_by_tag tag.name %}">{{ tag.name }}</a></li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
     {% endfor %}
     </ul>
     {% else %}
