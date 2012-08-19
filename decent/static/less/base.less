@@ -90,6 +90,10 @@ body {
         list-style-type: none;
     }
     
+    form .helptext {
+        display: none;
+    }
+    
     .bookmark-list {
         padding: 0;
         margin: 0 -10px;
@@ -150,13 +154,15 @@ body {
     padding: 0 10px 10px;
     border-bottom: 1pt dotted @dark-grey;
     margin-bottom: 20px;
-    height: 138px;
+    height: 146px;
     
     #nav, #add-new-bookmark {
         float: right;
+        font-size: .9em;
     }
     
     #add-new-bookmark {
+        margin-top: 7px;
         clear: right;
         max-width: 555px;
         padding: 4px 10px;
@@ -197,6 +203,20 @@ body {
 #one-column-main {
     padding: 10px 20px;
     max-width: 950px;
+    
+    .subcolumn {
+        width: 400px;
+        padding-bottom: 20px;
+        &.subcolumn-1 {
+            float: left;
+        }
+        &.subcolumn-2 {
+            margin-left: 430px;
+            float: none;
+            border-left: 1pt dotted @dark-grey;
+            padding-left: 60px;
+        }
+    }
 }
 
 #sidebar {

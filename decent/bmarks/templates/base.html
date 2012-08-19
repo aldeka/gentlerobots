@@ -27,16 +27,16 @@
             <div id="nav">
                 <a href="{% url home %}">home</a> | <a href="{% url about %}">about</a> | 
                 {% if user.is_authenticated %}
-                {{ user }}
                 <a href="{% url bmark_list_mine %}">my bookmarks</a> | <a href="{% url subscribe_page %}">my subscriptions</a> | <a>my account</a> | <a href="{% url logout %}">logout</a>
                 {% else %}
-                <a href="{% url bmark_list_all %}">bookmarks</a> | <a href="{% url login %}">login</a>
+                <a href="{% url bmark_list_all %}">bookmarks</a> | <a href="{% url login %}">login / signup</a>
                 {% endif %}
             </div>
             {% if user.is_authenticated %}
             <div id="add-new-bookmark">
                 {% if form %}
                     <form method="POST">
+                    {% csrf_token %}
                     <input type="submit" value=":-)" class="button" id="big-submit-button"/>
                     <h4>Add a bookmark:</h4>
                     {{ form.as_p }}

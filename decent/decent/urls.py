@@ -27,7 +27,7 @@ urlpatterns = patterns('',
     
     # Login/sign up
     
-    url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
+    url(r'^login/$', 'bmarks.views.crud.login', name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
 
     # **Copy someone else's bookmark to mine, with my own tags etc.
