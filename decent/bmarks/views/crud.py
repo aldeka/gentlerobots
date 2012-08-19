@@ -117,11 +117,11 @@ def login(request):
 def add_subscription(request, domain=None, username=None):
     if domain and username and request.user.is_authenticated():
         user = request.user
-        if domain="localhost":
+        if domain=="localhost":
             human = Human.objects.get(username=username)
             last_updated = datetime.datetime.now()
             last_received_update = datetime.datetime.now()
-            subscriber = (username=user.username, domain=user.human.address.domain, the_person_sending=human, last_updated=last_updated)
+            subscriber = Subscriber(username=user.username, domain=user.human.address.domain, the_person_sending=human, last_updated=last_updated)
             subscriber.save()
         else:
             # ping other domain to let them know to create a subscriber
