@@ -1,7 +1,17 @@
 {% extends 'one_column_base.html' %}
 
 {% block one-col %}
-<h3>Subscriptions</h3>
+<h3>add new subscription:</h3>
+{% if form %}
+    <form id="new-subscription" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="form-type" value="new-subscription">
+        {{ form.as_p }}
+        <p><input type="submit" value="submit" class="button"/></p>
+    </form>
+{% endif %}
+
+<h3>subscriptions:</h3>
 
      <ul class="subscription-list">
     {% for subscription in subscriptions %}

@@ -5,7 +5,7 @@ from django.contrib.auth import login as login_function
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from bmarks.models import Bookmark, Tag, Human, Address, Subscriber, Subscription
-from bmarks.forms import BookmarkForm
+from bmarks.forms import BookmarkForm, SubscriptionForm
 import datetime
     
 def bmark_list(request, username=None, tag=None, mode=None):
@@ -138,9 +138,11 @@ def add_subscription(request):
         if request.user.is_authenticated():
             human = request.user.human
             subscriptions = Subscription.objects.filter(the_person_listening=human)
+            form = SubscriptionForm()
             context = {
                 'subscriptions': subscriptions,
                 'human': human,
+                'form': form,
             }
             return render(request, 'subscriptions.html', context)
         else:

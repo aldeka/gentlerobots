@@ -8,6 +8,7 @@
 @trans: rgba(255,255,255,.5);
 @trans-white: rgba(255,255,255,.7);
 @dark-grey: #222;
+@orange: #ffd900;
 
 @button-border-light: 2pt solid white;
 @button-border-dark: 2pt solid @light-grey;
@@ -71,7 +72,6 @@ body {
 
     .button {
         .rounded;
-        font-size: 1.6em;
         background: @lighter-grey;
         border-top: @button-border-light;
         border-left: @button-border-light;
@@ -195,33 +195,40 @@ body {
 }
 
 #sidebar {
-    width: 260px;
+    width: 280px;
     float: right;
-    padding: 20px 10px;
+    padding: 0;
     
     .widget {
         margin-bottom: 20px;
+        padding: 0 10px 20px 10px;
     }
     
     #add-new-bookmark-widget {
         max-width: 555px;
-        padding: 4px 10px; 
-        .rounded(5px);
+        padding-top: 20px; 
+        .rounded;
+        background: @orange;
         
         p {
             margin: 0;
             
             input {
-                width: 160px;
+                width: 180px;
             }
             
             textarea {
-                width: 230px;
+                width: 250px;
+            }
+            
+            input, textarea {
+                line-height: 1.8em;
             }
         }
         
         #big-submit-button {
-            padding: 10px 40px;
+            padding: 10px 0;
+            width: 260px;
             font-size: 1.1em;
         }
     }
@@ -241,17 +248,10 @@ body {
     padding: 10px 20px;
     max-width: 950px;
     
-    .subcolumn {
-        width: 400px;
-        padding-bottom: 20px;
-        &.subcolumn-1 {
-            float: left;
-        }
-        &.subcolumn-2 {
-            margin-left: 430px;
-            float: none;
-            border-left: 1pt dotted @dark-grey;
-            padding-left: 60px;
+    #new-subscription {
+        margin-bottom: 20px;
+        p {
+            display: inline;
         }
     }
 }
