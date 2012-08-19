@@ -32,8 +32,9 @@ def bmark_list(request, username=None, tag=None):
         own_bookmarks = bookmarks.filter(owner=human.address)
         bookmarks = subscribed_bookmarks + own_bookmarks
         
+        
     context = {
-        'bookmarks': bookmarks,
+        'bookmarks': bookmarks.order_by('-time'),
         'tags': Tag.objects.all(),
         'human': human,
         'form': form,

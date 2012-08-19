@@ -52,3 +52,6 @@ class Bookmark(models.Model):
     
     def __unicode__(self):
         return self.url
+        
+    class Meta:
+        ordering = ['-time', 'owner']
