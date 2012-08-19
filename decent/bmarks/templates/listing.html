@@ -1,32 +1,8 @@
 {% extends 'two_column.html' %}
 
-{% block js %}
-    {{ block.super }}
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('.delete').click(function(e){
-                e.preventDefault();
-                var bookmark = $(this).parent();
-                var id = $(bookmark).attr('id');
-                console.log('deleting ' + id);
-                $.get(
-                    "{% url delete_bookmark %}",
-                    {
-                        'bookmark_id': id,
-                    },
-                    function(data){
-                        $(bookmark).hide();
-                    }
-                );
-
-            });
-        });
-    </script>
-{% endblock js %}
-
 {% block main %}
     {% if bookmarks %}
-    <h3>{% if mine %}My {% endif %}Bookmarks</h3>
+    <h3>{% if mine %}My {% elif all %}All {% endif %}Bookmarks</h3>
     <ul class="bookmark-list">
     {% for bookmark in bookmarks %}
         <li id="bookmark-{{ bookmark.id }}" class="bookmark">
@@ -41,6 +17,9 @@
                     <a href="{% url bmark_list_by_user bookmark.owner.human.username %}">{{ bookmark.owner.human.username }}</a>
                 {% else %}
                     {{ bookmark.owner.username }}
+                {% endif %}
+                {% if user.is_authenticated and bookmark.owner not in user.human.subscription_set.all %}
+                <a class="subscribe-link" href="{% url add_subscription 'localhost' bookmark.owner.username %}">subscribe</a>
                 {% endif %}
             {% endif %} -- added {{ bookmark.time.date|date:"m.d.y" }}</span>
             

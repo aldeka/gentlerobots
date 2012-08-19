@@ -27,7 +27,7 @@ class Subscription(Address):
         
 
 class Subscriber(Address):
-    the_person_sending = models.ForeignKey(Human)
+    the_person_sending = models.ForeignKey(Address)
     last_updated = models.DateTimeField()
     
     def __unicode__(self):
@@ -35,7 +35,7 @@ class Subscriber(Address):
         
     
 class Tag(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
     
     def __unicode__(self):
         return self.name

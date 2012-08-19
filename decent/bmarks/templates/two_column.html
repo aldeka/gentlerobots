@@ -8,7 +8,9 @@
                 <h3>Tags</h3>
                 <ul>
                 {% for tag in tags %}
+                    {% if tag.bookmark_set.count %}
                     <li><a href="{% url bmark_list_by_tag tag.name %}">{{ tag.name }} ({{ tag.bookmark_set.count }})</a></li>
+                    {% endif %}
                 {% endfor %}
                 </ul>
             </div>
